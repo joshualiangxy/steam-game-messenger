@@ -51,9 +51,10 @@ client.on('user', (sid: any, user: any): void => {
       .catch(() => {
         gameName = user.game_name;
         client.chat.sendFriendMessage(sid, gameName);
+      })
+      .then(() => {
+        console.log(`message sent to: ${user.player_name}`);
+        console.log(`message sent: ${gameName}`);
       });
-
-    console.log(`message sent to: ${user.player_name}`);
-    console.log(`message sent: ${gameName}`);
   }
 });
