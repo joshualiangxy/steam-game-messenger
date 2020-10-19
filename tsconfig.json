@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "watch": true,
+    "lib": ["ES6"],
+    "moduleResolution": "Node"
+  }
+}
