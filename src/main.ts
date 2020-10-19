@@ -2,13 +2,8 @@ require('dotenv').config();
 
 const SteamUser = require('steam-user');
 const SteamAPI = require('steamapi');
-const steam = new SteamAPI(process.env.API_KEY);
-const client = new SteamUser();
-
-interface EnteredGame {
-  gameName: String;
-  id: String;
-}
+const steam: typeof SteamAPI = new SteamAPI(process.env.API_KEY);
+const client: typeof SteamUser = new SteamUser();
 
 const victims: String[] = [
   process.env.ACCOUNT_ID_ONE,
@@ -19,7 +14,7 @@ const victims: String[] = [
   process.env.ACCOUNT_ID_SIX
 ];
 
-const details = {
+const details: Object = {
   accountName: process.env.STEAM_USERNAME,
   password: process.env.STEAM_PASSWORD
 };
@@ -35,24 +30,30 @@ client.on('user', (sid: any, user: any): void => {
   const victim: String[] = victims.filter(
     (accountId: String) => accountId == sid.accountid
   );
-  const gameId = user.gameid;
-  const hasVictim: boolean = victim.length == 1;
+  const gameId: number = user.gameid;
+  const isVictim: boolean = victim.length == 1;
   const isPlayingGame: boolean = gameId > 0;
   const wasPlayingDifferentGame: boolean =
     gameId != client.users[sid.getSteamID64()].gameid &&
     client.users[sid.getSteamID64()].gameid != undefined;
+  const hasChangedGame: boolean = isPlayingGame && wasPlayingDifferentGame;
+  let gameName: String = '';
 
-  if (!hasVictim) return;
+  if (!isVictim) return;
 
-  if (isPlayingGame && wasPlayingDifferentGame) {
+  if (hasChangedGame) {
     steam
       .getGameDetails(gameId)
       .then((game: any) => {
-        client.chat.sendFriendMessage(sid, game.name);
+        gameName = game.name;
+        client.chat.sendFriendMessage(sid, gameName);
       })
       .catch(() => {
-        client.chat.sendFriendMessage(sid, user.game_name);
+        gameName = user.game_name;
+        client.chat.sendFriendMessage(sid, gameName);
       });
+
+    console.log(`message sent to: ${user.player_name}`);
+    console.log(`message sent: ${gameName}`);
   }
 });
-

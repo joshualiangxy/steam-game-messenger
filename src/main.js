@@ -23,20 +23,26 @@ client.on('loggedOn', () => {
 client.on('user', (sid, user) => {
     const victim = victims.filter((accountId) => accountId == sid.accountid);
     const gameId = user.gameid;
-    const hasVictim = victim.length == 1;
+    const isVictim = victim.length == 1;
     const isPlayingGame = gameId > 0;
     const wasPlayingDifferentGame = gameId != client.users[sid.getSteamID64()].gameid &&
         client.users[sid.getSteamID64()].gameid != undefined;
-    if (!hasVictim)
+    const hasChangedGame = isPlayingGame && wasPlayingDifferentGame;
+    let gameName = '';
+    if (!isVictim)
         return;
-    if (isPlayingGame && wasPlayingDifferentGame) {
+    if (hasChangedGame) {
         steam
             .getGameDetails(gameId)
             .then((game) => {
-            client.chat.sendFriendMessage(sid, game.name);
+            gameName = game.name;
+            client.chat.sendFriendMessage(sid, gameName);
         })
             .catch(() => {
-            client.chat.sendFriendMessage(sid, user.game_name);
+            gameName = user.game_name;
+            client.chat.sendFriendMessage(sid, gameName);
         });
+        console.log(`message sent to: ${user.player_name}`);
+        console.log(`message sent: ${gameName}`);
     }
 });
