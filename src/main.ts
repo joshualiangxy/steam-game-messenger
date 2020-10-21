@@ -5,7 +5,7 @@ const SteamAPI = require('steamapi');
 const steam: typeof SteamAPI = new SteamAPI(process.env.API_KEY);
 const client: typeof SteamUser = new SteamUser();
 
-const maxTime = 30000;
+const maxDelay: number = 300000; // 5 minutes
 
 const victims: String[] = [
   process.env.ACCOUNT_ID_ONE,
@@ -47,7 +47,7 @@ client.on('user', (sid: any, user: any): void => {
     steam
       .getGameDetails(gameId)
       .then(async (game: any) => {
-        await new Promise(res => setTimeout(res, Math.random() * maxTime));
+        await new Promise(res => setTimeout(res, Math.random() * maxDelay));
         return game;
       })
       .then((game: any) => {
