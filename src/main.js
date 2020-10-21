@@ -3,6 +3,7 @@ const SteamUser = require('steam-user');
 const SteamAPI = require('steamapi');
 const steam = new SteamAPI(process.env.API_KEY);
 const client = new SteamUser();
+const maxTime = 30000;
 const victims = [
     process.env.ACCOUNT_ID_ONE,
     process.env.ACCOUNT_ID_TWO,
@@ -34,6 +35,10 @@ client.on('user', (sid, user) => {
     if (hasChangedGame) {
         steam
             .getGameDetails(gameId)
+            .then(async (game) => {
+            await new Promise(res => setTimeout(res, Math.random() * maxTime));
+            return game;
+        })
             .then((game) => {
             gameName = game.name;
             client.chat.sendFriendMessage(sid, gameName);
