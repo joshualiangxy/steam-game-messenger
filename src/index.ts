@@ -60,7 +60,6 @@ const initialize = (): void => {
 
     if (!victim) return;
 
-    console.log(user);
     const gameId: number = parseInt(user.gameid);
     let gameName: string = user.game_name;
 
