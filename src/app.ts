@@ -66,13 +66,13 @@ const initialize = (): void => {
       }
     }
 
-    await victim.update(gameId, gameName);
+    const updated = await victim.update(gameId, gameName);
 
     if (victim.isInitializing()) {
       return;
     }
 
-    if (victim.isIngame) {
+    if (updated && victim.isIngame) {
       // Random delay to make it seem more authentic
       await new Promise(res => setTimeout(res, Math.random() * MAX_DELAY));
 

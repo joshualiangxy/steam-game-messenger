@@ -37,33 +37,40 @@ export default class Victim {
   public async update(
     gameId: string | null,
     gameName: string | null
-  ): Promise<void> {
+  ): Promise<boolean> {
     const isIngame = gameId !== EMPTY_GAME_ID || gameName !== EMPTY_GAME_NAME;
+    const isInitializing = this.isInitializing();
 
-    if (this.isDifferentGame(gameId, gameName)) {
-      if (!this.isInitializing()) {
-        // Exiting game
-        if (this.isIngame && !isIngame) this.lastIngame = new Date();
-        // Entering/changing game
-        if (isIngame) this.isMessageSent = false;
-      }
+    if (!this.isDifferentGame(gameId, gameName)) {
+      const updated = this.ingame !== isIngame;
+      this.ingame = isIngame;
+
+      return updated;
+    }
+
+    if (!isInitializing) {
+      // Exiting game
+      if (this.isIngame && !isIngame) this.lastIngame = new Date();
+      // Entering/changing game
+      if (isIngame) this.isMessageSent = false;
     }
 
     this.ingame = isIngame;
 
-    if (this.isIngame || this.isInitializing()) {
+    if (this.isIngame || isInitializing) {
       this.gameId = gameId;
       this.gameName = gameName;
     }
+
+    return !isInitializing;
   }
 
   private shouldSendMessage(gameName: string): boolean {
-    if (gameName !== this.gameName) return false;
+    if (!this.isIngame || gameName !== this.gameName) return false;
     if (!this.isMessageSent) return true;
+    if (isNil(this.lastIngame)) return false;
 
     const now = new Date();
-
-    if (isNil(this.lastIngame)) return false;
 
     return now.valueOf() - this.lastIngame.valueOf() > TIME_LIMIT;
   }
