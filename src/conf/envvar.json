@@ -1,0 +1,8 @@
+{
+  "steam": {
+    "username": "STEAM_USERNAME",
+    "password": "STEAM_PASSWORD",
+    "apiKey": "API_KEY"
+  },
+  "victims": []
+}

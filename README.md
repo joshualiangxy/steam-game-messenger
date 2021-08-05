@@ -7,12 +7,9 @@ messages them if they enter a new steam game.
 ## Setup
 1. Clone the repository
 2. Install the dependencies using `yarn install`
-3. You will need to set up your list of victims in a `victims.json` file. Place
-   the file in a directory named `data` in the root directory
-   (`/data/victims.json`).
+3. You will need to set up your config in a `local.json` file. You can place the
+   file at `/src/conf/local.json`.
    You can find the account ids by simply printing out the user
    object found in the `'user'` event.
-4. You will need to set up environment variables for your STEAM_USERNAME and
-   STEAM_PASSWORD, as well as your API_KEY for steam.
-5. Run the program using node on the main.js file
+5. Run the program using `npm start`
 
