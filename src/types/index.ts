@@ -18,3 +18,14 @@ export interface Game {
   name: string;
 }
 
+interface SteamConfig {
+  username: string;
+  password: string;
+  apiKey: string;
+}
+
+export interface Config {
+  steam: SteamConfig;
+  victims: string[];
+}
+

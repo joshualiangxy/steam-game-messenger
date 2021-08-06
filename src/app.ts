@@ -5,13 +5,13 @@ import SteamAPI from 'steamapi';
 import SteamUser from 'steam-user';
 import Victim from './module/victim';
 import config from './config';
-import { Game, LoginDetail, SteamID, User } from './types/types';
+import { Config, Game, LoginDetail, SteamID, User } from './types';
 import { EMPTY_GAME_ID, EMPTY_GAME_NAME } from './module/victim/victim.const';
 
 const MAX_DELAY: number = 300000;
 const PERSONA_ONLINE: number = 1;
 
-const { steam: { username, password, apiKey }, victims } = config;
+const { steam: { username, password, apiKey }, victims }: Config = config;
 
 const getData = (): Map<string, Victim> => {
   const result: Map<string, Victim> = new Map<string, Victim>();
@@ -66,7 +66,7 @@ const initialize = (): void => {
       }
     }
 
-    const updated = await victim.update(gameId, gameName);
+    const updated: boolean = await victim.update(gameId, gameName);
 
     if (victim.isInitializing()) {
       return;
