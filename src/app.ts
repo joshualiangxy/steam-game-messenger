@@ -23,12 +23,6 @@ const getData = (): Map<string, Victim> => {
   return result;
 }
 
-/*
-const isNoLongerIngame = (gameId: number, gameName: string): boolean => {
-  return gameId == 0 && gameName == '';
-}
-*/
-
 const initialize = (): void => {
   const steam: typeof SteamAPI = new SteamAPI(apiKey);
   const client: typeof SteamUser = new SteamUser();
